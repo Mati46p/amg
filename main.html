@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMG Fracht - Market Intelligence System - Dokumentacja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero p {
+            font-size: 1.4em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .toc {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+        
+        .toc h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .toc-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fef5ff 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toc-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .section-icon {
+            font-size: 3em;
+            margin-right: 20px;
+        }
+        
+        .section-title {
+            flex: 1;
+        }
+        
+        .section-title h2 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        
+        .section-title p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .phase-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .phase-1 { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+        .phase-2 { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; }
+        .phase-25 { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        .phase-3 { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); color: white; }
+        
+        .ml-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #fef5ff 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #e9d5ff;
+        }
+        
+        .ml-card h3 {
+            color: #8b5cf6;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .data-flow {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .flow-box {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .flow-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+        
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .code-block .keyword { color: #c678dd; }
+        .code-block .string { color: #98c379; }
+        .code-block .comment { color: #5c6370; font-style: italic; }
+        .code-block .function { color: #61afef; }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .architecture-diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #e9d5ff;
+        }
+        
+        .layer {
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .layer-input { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); }
+        .layer-process { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+        .layer-output { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
+        
+        .layer h4 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metric-box {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #fef5ff 100%);
+            border-radius: 12px;
+            border: 2px solid #e9d5ff;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .algorithm-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .algorithm-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .pros, .cons {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .pros {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
+        
+        .cons {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .pros h5, .cons h5 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .pros h5 { color: #059669; }
+        .cons h5 { color: #dc2626; }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        ul li {
+            margin: 5px 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid #f59e0b;
+            margin: 20px 0;
+        }
+        
+        .highlight-box strong {
+            color: #d97706;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0 20px 40px;
+            margin: 30px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+        
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .timeline-content h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2em; }
+            .section { padding: 20px; }
+            .pros-cons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>📊 Market Intelligence System</h1>
+        <p>Kompletna dokumentacja systemu analizy rynku transportowego wykorzystującego Machine Learning</p>
+        <p style="margin-top: 10px; font-size: 1em; opacity: 0.9;">103,092 ofert | 32,375 z ceną (31.4%) | 9 analiz rynkowych</p>
+    </div>
+    
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>📑 Spis Treści</h2>
+            <div class="toc-grid">
+                <div class="toc-item">
+                    <strong>1. Przegląd Systemu</strong><br>
+                    <small>Architektura i przepływ danych</small>
+                </div>
+                <div class="toc-item">
+                    <strong>2. Faza 1 - Statystyki</strong><br>
+                    <small>Benchmarking i podstawowe analizy</small>
+                </div>
+                <div class="toc-item">
+                    <strong>3. Faza 2 - Machine Learning</strong><br>
+                    <small>Predykcja cen i klasyfikacja</small>
+                </div>
+                <div class="toc-item">
+                    <strong>4. Faza 2.5 - Analityka</strong><br>
+                    <small>Zaawansowane insights</small>
+                </div>
+                <div class="toc-item">
+                    <strong>5. Faza 3 - AI/LLM</strong><br>
+                    <small>Inteligentne wyjaśnienia</small>
+                </div>
+                <div class="toc-item">
+                    <strong>6. Dane Wejściowe</strong><br>
+                    <small>Co wykorzystujemy z bazy</small>
+                </div>
+                <div class="toc-item">
+                    <strong>7. Algorytmy ML</strong><br>
+                    <small>Szczegóły techniczne</small>
+                </div>
+                <div class="toc-item">
+                    <strong>8. ROI i Koszty</strong><br>
+                    <small>Zwrot z inwestycji</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 1: System Overview -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🏗️</div>
+                <div class="section-title">
+                    <h2>Architektura Systemu</h2>
+                    <p>Jak działa kompleksowy system Market Intelligence</p>
+                </div>
+            </div>
+            
+            <div class="architecture-diagram">
+                <h3 style="text-align: center; margin-bottom: 25px; color: #667eea;">Przepływ Danych i Przetwarzania</h3>
+                
+                <div class="layer layer-input">
+                    <h4>📥 Warstwa Danych (Input)</h4>
+                    <p><strong>103,092 oferty transportowe</strong> z modelu TransportOffer</p>
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <div class="metric-value">32.4k</div>
+                            <div class="metric-label">Z ceną</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value">70.7k</div>
+                            <div class="metric-label">Bez ceny</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value">25</div>
+                            <div class="metric-label">Atrybutów</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; font-size: 2em; color: #667eea; margin: 15px 0;">⬇️</div>
+                
+                <div class="layer layer-process">
+                    <h4>⚙️ Warstwa Przetwarzania (Processing)</h4>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Statistical Engine</h4>
+                            <p>Agregacje, mediana, percentyle, podobieństwo ofert</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>ML Model (LightGBM)</h4>
+                            <p>Predykcja cen, klasyfikacja tras, scoring</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>LLM Engine (Gemini)</h4>
+                            <p>Analiza kontekstowa, wyjaśnienia, rekomendacje</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; font-size: 2em; color: #667eea; margin: 15px 0;">⬇️</div>
+                
+                <div class="layer layer-output">
+                    <h4>📤 Warstwa Output (Results)</h4>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Price Analysis</h4>
+                            <p>Tier (A/B/C/D), odchylenie %, confidence</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>Market Insights</h4>
+                            <p>Trendy, sezonowość, konkurencja</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>AI Recommendations</h4>
+                            <p>BID/SKIP/NEGOTIATE + strategia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 2: Phase 1 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">💰</div>
+                <div class="section-title">
+                    <h2>Faza 1: Statistical Benchmarking</h2>
+                    <p>Podstawowa analiza statystyczna bez ML</p>
+                </div>
+                <span class="phase-badge phase-1">Quick Win</span>
+            </div>
+            
+            <div class="ml-card">
+                <h3>🎯 Cel Fazy 1</h3>
+                <p>Szybkie porównanie nowej oferty z historią podobnych tras. Działanie w czasie rzeczywistym (<100ms) bez kosztów ML.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Wykorzystywane Dane</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Pole z Modelu</th>
+                    <th>Wykorzystanie</th>
+                    <th>Przykład</th>
+                </tr>
+                <tr>
+                    <td>exchange_price</td>
+                    <td>Cena do porównania</td>
+                    <td>€650</td>
+                </tr>
+                <tr>
+                    <td>distance_km</td>
+                    <td>Filtrowanie podobnych tras (±15%)</td>
+                    <td>1316 km → szukaj 1119-1514 km</td>
+                </tr>
+                <tr>
+                    <td>cargo_weight</td>
+                    <td>Filtrowanie podobnego ładunku (±20%)</td>
+                    <td>200 kg → szukaj 160-240 kg</td>
+                </tr>
+                <tr>
+                    <td>locations (loading/unloading)</td>
+                    <td>Identyfikacja corridor'u</td>
+                    <td>IT → IT</td>
+                </tr>
+                <tr>
+                    <td>publication_date</td>
+                    <td>Okno czasowe (ostatnie 6m)</td>
+                    <td>2024-04-15 → 2024-10-15</td>
+                </tr>
+            </table>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Algorytm Similarity Matching</h3>
+            <div class="code-block">
+<span class="keyword">def</span> <span class="function">find_similar_offers</span>(new_offer):
+    <span class="comment"># 1. Filtrowanie bazowe</span>
+    filters = Q(
+        distance_km__range=(
+            new_offer.distance_km * <span class="string">0.85</span>,
+            new_offer.distance_km * <span class="string">1.15</span>
+        ),
+        cargo_weight__range=(
+            new_offer.cargo_weight * <span class="string">0.80</span>,
+            new_offer.cargo_weight * <span class="string">1.20</span>
+        ),
+        exchange_price__isnull=<span class="keyword">False</span>,
+        publication_date__gte=<span class="function">six_months_ago</span>()
+    )
+    
+    <span class="comment"># 2. Punktacja podobieństwa</span>
+    similar = TransportOffer.objects.filter(filters).annotate(
+        similarity_score=<span class="function">calculate_similarity_score</span>()
+    ).order_by(<span class="string">'-similarity_score'</span>)[:<span class="string">50</span>]
+    
+    <span class="comment"># 3. Statystyki</span>
+    prices = [offer.exchange_price <span class="keyword">for</span> offer <span class="keyword">in</span> similar]
+    <span class="keyword">return</span> {
+        <span class="string">'median'</span>: <span class="function">median</span>(prices),
+        <span class="string">'mean'</span>: <span class="function">mean</span>(prices),
+        <span class="string">'p25'</span>: <span class="function">percentile</span>(prices, <span class="string">25</span>),
+        <span class="string">'p75'</span>: <span class="function">percentile</span>(prices, <span class="string">75</span>),
+        <span class="string">'count'</span>: <span class="function">len</span>(similar)
+    }
+            </div>
+            
+            <div class="highlight-box">
+                <strong>⚡ Szybkość:</strong> ~50-100ms na zapytanie (czysty SQL)<br>
+                <strong>💰 Koszt:</strong> €0 (bez ML, bez API calls)<br>
+                <strong>📊 Dokładność:</strong> 75-80% (bazuje na historii)
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Output Fazy 1</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Market Tier</h4>
+                    <p><strong>A/B/C/D</strong> bazując na odchyleniu od mediany:<br>
+                    A: <-10% | B: -10-0% | C: 0-10% | D: >10%</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Price Deviation</h4>
+                    <p><strong>-12.7%</strong> vs mediana<br>
+                    (korzystnie = minus, drogo = plus)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Confidence Score</h4>
+                    <p><strong>87%</strong> bazując na ilości podobnych ofert i ich spójności cenowej</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Context Stats</h4>
+                    <p>47 podobnych tras, mediana €745, percentyle 25/75: €680/€820</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 3: Phase 2 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🤖</div>
+                <div class="section-title">
+                    <h2>Faza 2: Machine Learning Models</h2>
+                    <p>Predykcja cen i klasyfikacja wykorzystująca ML</p>
+                </div>
+                <span class="phase-badge phase-2">Core ML</span>
+            </div>
+            
+            <div class="ml-card">
+                <h3>🎯 Cel Fazy 2</h3>
+                <p>Przewidywanie "should-be" ceny rynkowej dla każdej trasy na podstawie historycznych wzorców. Model uczy się z 32,375 ofert z ceną.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Feature Engineering - Dane Wejściowe dla ML</h3>
+            <table class="data-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Źródło</th>
+                    <th>Typ</th>
+                    <th>Transformacja</th>
+                </tr>
+                <tr>
+                    <td>distance_km</td>
+                    <td>TransportOffer</td>
+                    <td>Numeric</td>
+                    <td>StandardScaler</td>
+                </tr>
+                <tr>
+                    <td>cargo_weight</td>
+                    <td>TransportOffer</td>
+                    <td>Numeric</td>
+                    <td>Log transform + scaler</td>
+                </tr>
+                <tr>
+                    <td>ldm</td>
+                    <td>TransportOffer</td>
+                    <td>Numeric</td>
+                    <td>StandardScaler</td>
+                </tr>
+                <tr>
+                    <td>country_pair</td>
+                    <td>locations (concatenated)</td>
+                    <td>Categorical</td>
+                    <td>LabelEncoder → "PL-DE", "IT-IT"</td>
+                </tr>
+                <tr>
+                    <td>vehicle_size</td>
+                    <td>required_vehicle_size</td>
+                    <td>Categorical</td>
+                    <td>OneHotEncoder (8 kategorii)</td>
+                </tr>
+                <tr>
+                    <td>is_adr</td>
+                    <td>is_adr</td>
+                    <td>Binary</td>
+                    <td>0/1</td>
+                </tr>
+                <tr>
+                    <td>tail_lift_required</td>
+                    <td>tail_lift_required</td>
+                    <td>Binary</td>
+                    <td>0/1</td>
+                </tr>
+                <tr>
+                    <td>is_ftl</td>
+                    <td>is_ftl</td>
+                    <td>Binary</td>
+                    <td>0/1</td>
+                </tr>
+                <tr>
+                    <td>payment_term</td>
+                    <td>payment_term</td>
+                    <td>Numeric</td>
+                    <td>Days (14, 21, 30, 45, 60)</td>
+                </tr>
+                <tr>
+                    <td>month</td>
+                    <td>publication_date</td>
+                    <td>Cyclic</td>
+                    <td>sin/cos encoding (sezonowość)</td>
+                </tr>
+                <tr>
+                    <td>day_of_week</td>
+                    <td>publication_date</td>
+                    <td>Cyclic</td>
+                    <td>sin/cos encoding</td>
+                </tr>
+                <tr>
+                    <td>client_credibility</td>
+                    <td>client.credibility_score</td>
+                    <td>Numeric</td>
+                    <td>0-100 (już w bazie!)</td>
+                </tr>
+            </table>
+            
+            <div class="highlight-box">
+                <strong>💡 Total Features:</strong> ~25-30 po transformacji (categorical → one-hot expansion)<br>
+                <strong>📊 Training Set:</strong> 32,375 ofert z ceną → split 80/20 (train/test)<br>
+                <strong>🎯 Target Variable:</strong> exchange_price (w EUR)
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Wybór Algorytmu ML</h3>
+            
+            <div class="algorithm-card">
+                <h4>🏆 #1 Rekomendacja: LightGBM Regressor</h4>
+                <p><strong>Dlaczego LightGBM?</strong> Badania pokazują najlepsze wyniki dla freight pricing.</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Zalety</h5>
+                        <ul>
+                            <li>Najszybszy training (3-5 min na 32k samples)</li>
+                            <li>Najwyższa dokładność (R² 0.88-0.92)</li>
+                            <li>Obsługa categorical features natywnie</li>
+                            <li>Mała ilość pamięci (~50MB model)</li>
+                            <li>Built-in feature importance</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>⚠️ Wady</h5>
+                        <ul>
+                            <li>Wymaga tuning hyperparameters</li>
+                            <li>Może overfit na małych dataset'ach</li>
+                            <li>Black-box (trudniejszy do wyjaśnienia)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="code-block" style="margin-top: 15px;">
+<span class="keyword">from</span> lightgbm <span class="keyword">import</span> LGBMRegressor
+
+model = <span class="function">LGBMRegressor</span>(
+    n_estimators=<span class="string">500</span>,
+    learning_rate=<span class="string">0.05</span>,
+    max_depth=<span class="string">8</span>,
+    num_leaves=<span class="string">31</span>,
+    objective=<span class="string">'regression'</span>,
+    metric=<span class="string">'rmse'</span>,
+    random_state=<span class="string">42</span>
+)
+
+model.<span class="function">fit</span>(X_train, y_train)
+
+<span class="comment"># Predykcja</span>
+predicted_price = model.<span class="function">predict</span>(X_new_offer)
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>#2 Alternatywa: XGBoost Regressor</h4>
+                <p>Bardzo podobny do LightGBM, nieco wolniejszy ale bardziej stabilny.</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Zalety</h5>
+                        <ul>
+                            <li>Bardziej stabilny na małych dataset'ach</li>
+                            <li>Świetna dokumentacja i community</li>
+                            <li>Mniej overfit'uje</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>⚠️ Wady</h5>
+                        <ul>
+                            <li>2-3x wolniejszy training niż LightGBM</li>
+                            <li>Więcej pamięci (~100MB model)</li>
+                            <li>Nieco niższa accuracy (R² ~0.85-0.89)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>#3 Deep Learning: Neural Networks</h4>
+                <p>Dla bardzo dużych dataset'ów (>100k samples) lub complex patterns.</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Zalety</h5>
+                        <ul>
+                            <li>Najlepsza accuracy na huge datasets</li>
+                            <li>Może uchwycić non-linear patterns</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>⚠️ Wady</h5>
+                        <ul>
+                            <li>Wymaga 10x więcej danych (>100k)</li>
+                            <li>Wolny training (15-30 min)</li>
+                            <li>Trudny w interpretacji</li>
+                            <li>Potrzebuje GPU dla szybkości</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>🎯 Rekomendacja:</strong> Przy 32k samples z ceną - <strong>LightGBM</strong> jest optymalny. Neural Networks dopiero przy >100k samples.
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Model Training Pipeline</h3>
+            <div class="code-block">
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error, r2_score
+
+<span class="comment"># 1. Przygotowanie danych</span>
+df = <span class="function">prepare_training_data</span>()  <span class="comment"># 32,375 ofert z ceną</span>
+X = df[features]
+y = df[<span class="string">'exchange_price'</span>]
+
+<span class="comment"># 2. Split train/test (80/20)</span>
+X_train, X_test, y_train, y_test = <span class="function">train_test_split</span>(
+    X, y, test_size=<span class="string">0.2</span>, random_state=<span class="string">42</span>
+)
+
+<span class="comment"># 3. Training</span>
+model = <span class="function">LGBMRegressor</span>(...)
+model.<span class="function">fit</span>(X_train, y_train)
+
+<span class="comment"># 4. Evaluation</span>
+y_pred = model.<span class="function">predict</span>(X_test)
+mae = <span class="function">mean_absolute_error</span>(y_test, y_pred)
+r2 = <span class="function">r2_score</span>(y_test, y_pred)
+
+<span class="keyword">print</span>(<span class="string">f"MAE: {mae:.2f} EUR, R²: {r2:.3f}"</span>)
+<span class="comment"># Expected: MAE: 45-60 EUR, R²: 0.88-0.92</span>
+
+<span class="comment"># 5. Feature Importance</span>
+importance = model.feature_importances_
+<span class="comment"># Top 5: distance_km, country_pair, cargo_weight, month, vehicle_size</span>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Output Fazy 2</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Predicted Price</h4>
+                    <p><strong>€745</strong> (should-be market price)<br>
+                    Model: 90% confidence</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Price Opportunity</h4>
+                    <p>Client: €650 vs Predicted: €745<br>
+                    <strong>Savings: -€95 (-12.7%)</strong></p>
+                </div>
+                <div class="feature-card">
+                    <h4>Feature Importance</h4>
+                    <p>Top drivers: Distance (42%), Country (23%), Weight (18%)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Risk Assessment</h4>
+                    <p>Prediction interval: ±€60<br>
+                    (95% confidence: €685-€805)</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 4: Phase 2.5 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <div class="section-title">
+                    <h2>Faza 2.5: Advanced Analytics</h2>
+                    <p>Zaawansowane analizy bazujące na ML i statystykach</p>
+                </div>
+                <span class="phase-badge phase-25">Analytics</span>
+            </div>
+            
+            <div class="ml-card">
+                <h3>🎯 Cel Fazy 2.5</h3>
+                <p>Głębsze insights wykorzystujące clustering, pattern recognition i time-series analysis.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Algorytmy i Analizy</h3>
+            
+            <div class="algorithm-card">
+                <h4>1. Route Clustering (K-Means)</h4>
+                <p>Grupowanie tras według rentowności i podobieństwa.</p>
+                
+                <div class="code-block">
+<span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans
+
+<span class="comment"># Features: avg_margin, volume, avg_price, competition_level</span>
+features = df[[<span class="string">'avg_margin'</span>, <span class="string">'volume'</span>, <span class="string">'avg_price'</span>, <span class="string">'competition'</span>]]
+
+kmeans = <span class="function">KMeans</span>(n_clusters=<span class="string">5</span>, random_state=<span class="string">42</span>)
+clusters = kmeans.<span class="function">fit_predict</span>(features)
+
+<span class="comment"># Output: 5 grup tras</span>
+<span class="comment"># Cluster 0: High margin + Low competition (GOLD)</span>
+<span class="comment"># Cluster 1: High volume + Medium margin (STABLE)</span>
+<span class="comment"># Cluster 2: Low margin + High competition (AVOID)</span>
+                </div>
+                
+                <p><strong>Output:</strong> Sweet spot routes (800-1200km PL→DE = Cluster 0 "GOLD")</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>2. Client Segmentation (RFM Analysis)</h4>
+                <p>Klasyfikacja klientów wg wartości: Recency, Frequency, Monetary.</p>
+                
+                <div class="code-block">
+<span class="keyword">def</span> <span class="function">segment_clients</span>(clients):
+    <span class="comment"># R: Ostatnia oferta (dni)</span>
+    <span class="comment"># F: Liczba ofert (count)</span>
+    <span class="comment"># M: Średnia cena (EUR)</span>
+    
+    segments = {
+        <span class="string">'VIP'</span>: F > <span class="string">50</span> <span class="keyword">and</span> M > <span class="string">1.12</span> * market_avg,  <span class="comment"># Częste + drogie</span>
+        <span class="string">'Regular'</span>: F > <span class="string">20</span> <span class="keyword">and</span> M > <span class="string">0.95</span> * market_avg,
+        <span class="string">'Occasional'</span>: F < <span class="string">10</span>,
+        <span class="string">'Price_Sensitive'</span>: M < <span class="string">0.90</span> * market_avg  <span class="comment"># Targują mocno</span>
+    }
+                </div>
+                
+                <p><strong>Output:</strong> ERFOLG s.r.o. = VIP (127 ofert, +12.3% vs market)</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>3. Seasonal Decomposition (Time Series)</h4>
+                <p>Wyodrębnienie trendu, sezonowości i anomalii z cen.</p>
+                
+                <div class="code-block">
+<span class="keyword">from</span> statsmodels.tsa.seasonal <span class="keyword">import</span> seasonal_decompose
+
+<span class="comment"># Agreguj ceny daily dla trasy PL→DE</span>
+ts = df.groupby(<span class="string">'publication_date'</span>)[<span class="string">'exchange_price'</span>].<span class="function">mean</span>()
+
+<span class="comment"># Decompose</span>
+result = <span class="function">seasonal_decompose</span>(ts, model=<span class="string">'additive'</span>, period=<span class="string">30</span>)
+
+<span class="comment"># Output components:</span>
+<span class="comment"># - Trend: długoterminowy wzrost/spadek</span>
+<span class="comment"># - Seasonal: cykliczne wzorce (grudzień +12%)</span>
+<span class="comment"># - Residual: anomalie (nieoczekiwane skoki)</span>
+                </div>
+                
+                <p><strong>Output:</strong> Grudzień peak season (+12% vs średnia), Piątek -6% vs poniedziałek</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>4. Anomaly Detection (Isolation Forest)</h4>
+                <p>Wykrywanie nietypowych ofert (potencjalne oszustwa).</p>
+                
+                <div class="code-block">
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> IsolationForest
+
+<span class="comment"># Features: price, distance, weight, payment_term</span>
+clf = <span class="function">IsolationForest</span>(contamination=<span class="string">0.05</span>, random_state=<span class="string">42</span>)
+anomalies = clf.<span class="function">fit_predict</span>(features)
+
+<span class="comment"># -1 = anomaly, 1 = normal</span>
+suspicious_offers = df[anomalies == <span class="string">-1</span>]
+
+<span class="comment"># Typical anomalies:</span>
+<span class="comment"># - Price 47% above median</span>
+<span class="comment"># - New client + free email domain</span>
+<span class="comment"># - 100% prepayment required</span>
+                </div>
+                
+                <p><strong>Output:</strong> 5% ofert oznaczonych jako anomalie → manual review</p>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 Faza 2.5 = ML + Domain Knowledge</strong><br>
+                Łączymy klasyczne algorytmy ML (clustering, decomposition) z wiedzą biznesową (sweet spots, VIP clients, fraud patterns).
+            </div>
+        </div>
+        
+        <!-- Section 5: Phase 3 -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🧠</div>
+                <div class="section-title">
+                    <h2>Faza 3: LLM-Enhanced Intelligence</h2>
+                    <p>Wykorzystanie Large Language Models do wyjaśnień i rekomendacji</p>
+                </div>
+                <span class="phase-badge phase-3">AI Premium</span>
+            </div>
+            
+            <div class="ml-card">
+                <h3>🎯 Cel Fazy 3</h3>
+                <p>Dodanie "ludzkiej" warstwy rozumienia poprzez LLM (Gemini Pro). AI wyjaśnia "dlaczego" i podaje konkretne rekomendacje.</p>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Wykorzystywane Technologie</h3>
+            
+            <div class="algorithm-card">
+                <h4>🤖 LLM: Google Gemini Pro 1.5</h4>
+                <p><strong>Dlaczego Gemini?</strong> Już używany w AMG Fracht (utils/gemini_service.py)</p>
+                
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Zalety</h5>
+                        <ul>
+                            <li>Świetne rozumienie kontekstu biznesowego</li>
+                            <li>Duży context window (1M tokens)</li>
+                            <li>Niski koszt (~$0.002 per query)</li>
+                            <li>Już zintegrowany w systemie</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>⚠️ Limity</h5>
+                        <ul>
+                            <li>Wymaga API calls (koszt variable)</li>
+                            <li>Latency 1-3s per query</li>
+                            <li>Potrzebuje dobrych promptów</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <h4>📚 RAG: Retrieval-Augmented Generation</h4>
+                <p>Wzbogacanie LLM o kontekst z bazy danych (podobne oferty).</p>
+                
+                <div class="code-block">
+<span class="keyword">from</span> utils.gemini_service <span class="keyword">import</span> GeminiService
+
+<span class="keyword">def</span> <span class="function">analyze_offer_with_ai</span>(offer, similar_offers):
+    <span class="comment"># 1. Przygotuj kontekst z bazy</span>
+    context = <span class="string">f"""
+    NOWA OFERTA:
+    - Trasa: {offer.route}
+    - Dystans: {offer.distance_km} km
+    - Cena: {offer.exchange_price} EUR
+    - Mediana rynkowa: {similar_offers.median} EUR
+    
+    PODOBNE OFERTY (ostatnie 6m):
+    {format_similar_offers(similar_offers)}
+    """</span>
+    
+    <span class="comment"># 2. Prompt dla LLM</span>
+    prompt = <span class="string">f"""
+    Jesteś ekspertem od rynku transportowego.
+    Przeanalizuj ofertę i odpowiedz:
+    
+    1. Czy cena jest korzystna? (tak/nie + %)
+    2. Dlaczego cena jest taka? (3-4 powody)
+    3. Jakie ryzyka? (jeśli są)
+    4. Rekomendacja: BID/SKIP/NEGOTIATE
+    
+    {context}
+    
+    Odpowiedź w JSON.
+    """</span>
+    
+    <span class="comment"># 3. Call LLM</span>
+    response = GeminiService.<span class="function">generate_content</span>(prompt)
+    
+    <span class="keyword">return</span> <span class="function">parse_ai_response</span>(response)
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">Przykładowe Use Cases</h3>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔍 Deep Context Analysis</h4>
+                    <p>"Dlaczego cena €650 jest korzystna?"<br>
+                    → AI wyjaśnia: 4 powody + dane historyczne</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💼 Negotiation Strategy</h4>
+                    <p>"Jak negocjować z tym klientem?"<br>
+                    → AI: 3-step plan + argumenty</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚠️ Risk Assessment</h4>
+                    <p>"Czy ta oferta jest bezpieczna?"<br>
+                    → AI wykrywa red flags + podobne przypadki</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎯 Personalized Tips</h4>
+                    <p>"Top 3 oferty dla Ciebie"<br>
+                    → AI dopasowuje do Twojego stylu pracy</p>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💰 Koszty Fazy 3:</strong><br>
+                • Gemini API: ~$0.002 per query (1000 queries = $2)<br>
+                • Miesięczny koszt przy 5000 AI analiz: ~$10-50<br>
+                • Vector DB (opcjonalnie): ~$20-50/m (Pinecone/Weaviate)<br>
+                <strong>Total: €50-200/m-c</strong> (zależnie od usage)
+            </div>
+        </div>
+        
+        <!-- Section 6: Data Sources -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🗃️</div>
+                <div class="section-title">
+                    <h2>Źródła Danych - Co Wykorzystujemy</h2>
+                    <p>Kompletna mapa danych z modelu TransportOffer</p>
+                </div>
+            </div>
+            
+            <h3 style="color: #667eea;">Główne Tabele i Pola</h3>
+            
+            <div class="ml-card">
+                <h3>📦 TransportOffer (103,092 records)</h3>
+                <table class="data-table" style="margin-top: 15px;">
+                    <tr>
+                        <th>Pole</th>
+                        <th>Coverage</th>
+                        <th>Wykorzystanie</th>
+                    </tr>
+                    <tr>
+                        <td>exchange_price</td>
+                        <td>31.4% (32,375)</td>
+                        <td>Target dla ML, benchmark dla Fazy 1</td>
+                    </tr>
+                    <tr>
+                        <td>distance_km</td>
+                        <td>~85%</td>
+                        <td>Primary feature dla similarity + ML</td>
+                    </tr>
+                    <tr>
+                        <td>cargo_weight</td>
+                        <td>~70%</td>
+                        <td>Feature dla ML, similarity filter</td>
+                    </tr>
+                    <tr>
+                        <td>ldm</td>
+                        <td>~45%</td>
+                        <td>Feature dla ML (loading meters)</td>
+                    </tr>
+                    <tr>
+                        <td>publication_date</td>
+                        <td>100%</td>
+                        <td>Time-series, sezonowość, filtering</td>
+                    </tr>
+                    <tr>
+                        <td>required_vehicle_size</td>
+                        <td>~90%</td>
+                        <td>Categorical feature dla ML</td>
+                    </tr>
+                    <tr>
+                        <td>is_adr</td>
+                        <td>100%</td>
+                        <td>Binary feature (premium cargo)</td>
+                    </tr>
+                    <tr>
+                        <td>payment_term</td>
+                        <td>~80%</td>
+                        <td>Risk scoring, feature dla ML</td>
+                    </tr>
+                    <tr>
+                        <td>client</td>
+                        <td>~60%</td>
+                        <td>Client segmentation, RFM analysis</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="ml-card">
+                <h3>📍 TransportLocation (linked 1:N)</h3>
+                <table class="data-table" style="margin-top: 15px;">
+                    <tr>
+                        <th>Pole</th>
+                        <th>Wykorzystanie</th>
+                    </tr>
+                    <tr>
+                        <td>country</td>
+                        <td>Identyfikacja corridor'u (PL→DE)</td>
+                    </tr>
+                    <tr>
+                        <td>city</td>
+                        <td>Location profiling, approach distance</td>
+                    </tr>
+                    <tr>
+                        <td>date_start / date_end</td>
+                        <td>Lead time analysis, urgency scoring</td>
+                    </tr>
+                    <tr>
+                        <td>lat / lng</td>
+                        <td>Geographic clustering (opcjonalne)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="ml-card">
+                <h3>👥 Client (linked M:1)</h3>
+                <table class="data-table" style="margin-top: 15px;">
+                    <tr>
+                        <th>Pole</th>
+                        <th>Wykorzystanie</th>
+                    </tr>
+                    <tr>
+                        <td>credibility_score</td>
+                        <td>Feature dla ML (już obliczony!)</td>
+                    </tr>
+                    <tr>
+                        <td>average_payment_term</td>
+                        <td>Risk assessment</td>
+                    </tr>
+                    <tr>
+                        <td>total_orders_count</td>
+                        <td>Client frequency (RFM)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>💡 Key Insight:</strong> Mamy 103k ofert, ale tylko 31.4% ma cenę. To wystarczy do ML (32k samples), ale:<br>
+                • Pozostałe 70.7k ofert (bez ceny) = kontekst dla similarity matching<br>
+                • Można użyć jako "unlabeled data" w semi-supervised learning (advanced)<br>
+                • Każda nowa oferta z ceną to training data!
+            </div>
+        </div>
+        
+        <!-- Section 7: Implementation Timeline -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">📅</div>
+                <div class="section-title">
+                    <h2>Harmonogram Implementacji</h2>
+                    <p>Plan wdrożenia krok po kroku</p>
+                </div>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Tydzień 1-2: Faza 1 (Statistical)</h4>
+                        <p><strong>Deliverables:</strong></p>
+                        <ul>
+                            <li>Model: OfferMarketAnalysis</li>
+                            <li>Service: StatisticalMarketAnalyzer</li>
+                            <li>API: /api/offers/{id}/market-analysis/</li>
+                            <li>Frontend: MarketAnalysisPanel.jsx</li>
+                        </ul>
+                        <p><strong>Effort:</strong> 8-12h dev + 4h testing</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Tydzień 3-4: Faza 2 (ML Model)</h4>
+                        <p><strong>Deliverables:</strong></p>
+                        <ul>
+                            <li>Data preparation & feature engineering</li>
+                            <li>LightGBM training pipeline</li>
+                            <li>Model evaluation (R², MAE)</li>
+                            <li>Service: MLPricingPredictor</li>
+                            <li>Integration z Faza 1</li>
+                        </ul>
+                        <p><strong>Effort:</strong> 24-32h dev + 8h training/tuning</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Tydzień 5-6: Faza 2.5 (Advanced)</h4>
+                        <p><strong>Deliverables:</strong></p>
+                        <ul>
+                            <li>Route clustering analysis</li>
+                            <li>Client segmentation (RFM)</li>
+                            <li>Seasonal decomposition</li>
+                            <li>Anomaly detection</li>
+                            <li>Dashboard z insights</li>
+                        </ul>
+                        <p><strong>Effort:</strong> 16-24h dev + 4h analysis</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h4>Tydzień 7-8: Faza 3 (LLM - Opcjonalna)</h4>
+                        <p><strong>Deliverables:</strong></p>
+                        <ul>
+                            <li>Gemini integration dla deep analysis</li>
+                            <li>RAG setup (optional vector DB)</li>
+                            <li>Prompt engineering</li>
+                            <li>AI recommendations UI</li>
+                        </ul>
+                        <p><strong>Effort:</strong> 16-20h dev + 4h prompt tuning</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-value">6-8</div>
+                    <div class="metric-label">Tygodni total</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">64-88h</div>
+                    <div class="metric-label">Developer time</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">€0</div>
+                    <div class="metric-label">Faza 1+2 runtime</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">€50-200</div>
+                    <div class="metric-label">Faza 3/m-c (LLM)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Section 8: ROI -->
+        <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="text-align: center; margin-bottom: 30px; font-size: 2.5em;">💰 ROI i Wartość Biznesowa</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px;">
+                <div style="background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px;">
+                    <h3 style="margin-bottom: 15px;">📈 Potencjalny Zysk</h3>
+                    <div style="font-size: 2.5em; font-weight: 900; margin: 10px 0;">€2,000-5,000</div>
+                    <p style="font-size: 1.1em;">miesięcznie z lepszych decyzji</p>
+                    <ul style="margin-top: 15px; line-height: 1.8;">
+                        <li>10-15 dobrych ofert/m-c @ €100-150 marży</li>
+                        <li>5-8 unikniętych złych ofert @ €200-300 straty</li>
+                        <li>Wykrycie 1-2 oszustw = oszczędność €500-2000</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px;">
+                    <h3 style="margin-bottom: 15px;">⏱️ Oszczędność Czasu</h3>
+                    <div style="font-size: 2.5em; font-weight: 900; margin: 10px 0;">2-3h</div>
+                    <p style="font-size: 1.1em;">dziennie na analizę ręczną</p>
+                    <ul style="margin-top: 15px; line-height: 1.8;">
+                        <li>Automatyczna ocena każdej oferty (<100ms)</li>
+                        <li>AI priorityzuje najlepsze oferty</li>
+                        <li>Gotowe insights zamiast ręcznego research</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.15); padding: 25px; border-radius: 15px;">
+                    <h3 style="margin-bottom: 15px;">🎯 Lepsza Jakość</h3>
+                    <div style="font-size: 2.5em; font-weight: 900; margin: 10px 0;">+15-25%</div>
+                    <p style="font-size: 1.1em;">success rate w licytacjach</p>
+                    <ul style="margin-top: 15px; line-height: 1.8;">
+                        <li>Dane-driven pricing strategy</li>
+                        <li>AI wykrywa sweet spots i anomalie</li>
+                        <li>Personalizowane rekomendacje</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 15px; text-align: center;">
+                <h3 style="font-size: 1.8em; margin-bottom: 15px;">📊 Podsumowanie ROI</h3>
+                <div style="font-size: 1.3em; line-height: 2;">
+                    <strong>Koszt rozwoju:</strong> 64-88h dev time (jednorazowo)<br>
+                    <strong>Koszt operacyjny:</strong> €0-200/m-c (Faza 3 opcjonalna)<br>
+                    <strong>Potencjalny zwrot:</strong> €2,000-5,000/m-c<br>
+                    <strong>ROI:</strong> <span style="font-size: 1.5em; font-weight: 900;">10-50x</span> w skali roku
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: rgba(16, 185, 129, 0.2); border-radius: 15px; border: 3px solid rgba(16, 185, 129, 0.5);">
+                <h3 style="text-align: center; font-size: 1.6em; margin-bottom: 15px;">✅ Dodatkowe Korzyści</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                    <div>
+                        <strong>📚 Uczenie się z każdej oferty</strong><br>
+                        Model poprawia się automatycznie
+                    </div>
+                    <div>
+                        <strong>🔍 Zero missed opportunities</strong><br>
+                        AI nie pominie dobrych ofert
+                    </div>
+                    <div>
+                        <strong>⚠️ Early fraud detection</strong><br>
+                        Oszczędność €500-2000/m-c
+                    </div>
+                    <div>
+                        <strong>📈 Competitive advantage</strong><br>
+                        Data-driven vs intuicja konkurencji
+                    </div>
+                    <div>
+                        <strong>🎓 Team improvement</strong><br>
+                        Spedytorzy uczą się od AI
+                    </div>
+                    <div>
+                        <strong>📊 Better reporting</strong><br>
+                        Insights dla zarządu
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="text-align: center; padding: 40px 20px; color: #666;">
+            <p style="font-size: 1.2em; margin-bottom: 10px;">
+                <strong>AMG Fracht - Market Intelligence System</strong>
+            </p>
+            <p>Dokumentacja techniczna v1.0 | Listopad 2024</p>
+            <p style="margin-top: 20px; font-size: 0.9em;">
+                103,092 ofert • 32,375 z ceną • 9 analiz rynkowych • 3 fazy implementacji
+            </p>
+        </div>
+    </div>
+</body>
+</html>
